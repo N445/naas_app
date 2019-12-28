@@ -28,11 +28,6 @@ class RandomWordsState extends State<RandomWords> {
     );
   }
 
-  /*Widget build(BuildContext context) {
-    final wordPair = WordPair.random();
-    return Text(wordPair.asPascalCase);
-  }*/
-
   Widget _buildRow(WordPair pair) {
     final bool alreadySaved = _saved.contains(pair);
 
@@ -102,6 +97,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Welcome to Flutter',
       home: RandomWords(),
     );

@@ -8,24 +8,40 @@ import 'package:english_words/english_words.dart';
 void main() => runApp(MyApp());
 
 class RandomWordsState extends State<RandomWords> {
+  int _selectedIndex = 0;
   final List<WordPair> _suggestions = <WordPair>[];
   final Set<WordPair> _saved = Set<WordPair>();
   final TextStyle _biggerFont = const TextStyle(fontSize: 18.0);
 
+  void _onTapItem(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Naas générator de ouf'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.list),
-            onPressed: _pushSaved,
-          )
-        ],
-      ),
-      body: _buildSuggestions(),
-    );
+        appBar: AppBar(
+          leading: Builder(builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(Icons.apps),
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => Contact()
+                ));
+              },
+            );
+          }),
+          title: Text('Naas générator de ouf'),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.list),
+              onPressed: _pushSaved,
+            )
+          ],
+        ),
+        body: _buildSuggestions());
   }
 
   Widget _buildRow(WordPair pair) {
@@ -64,18 +80,40 @@ class RandomWordsState extends State<RandomWords> {
         });
   }
 
+  Widget _buildBottomNav() {
+    return BottomNavigationBar(
+      items: const <BottomNavigationBarItem>[
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          title: Text('Home'),
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.business),
+          title: Text('Business'),
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.school),
+          title: Text('School'),
+        ),
+      ],
+      currentIndex: _selectedIndex,
+      selectedItemColor: Colors.teal,
+      onTap: _onTapItem,
+    );
+  }
+
   void _pushSaved() {
     Navigator.of(context)
         .push(MaterialPageRoute<void>(builder: (BuildContext context) {
       final Iterable<ListTile> tiles = _saved.map((WordPair pair) {
         return ListTile(
             title: Text(
-          pair.asPascalCase,
-          style: _biggerFont,
-        ));
+              pair.asPascalCase,
+              style: _biggerFont,
+            ));
       });
       final List<Widget> divided =
-          ListTile.divideTiles(context: context, tiles: tiles).toList();
+      ListTile.divideTiles(context: context, tiles: tiles).toList();
 
       return Scaffold(
         // Add 6 lines from here...
@@ -98,8 +136,26 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(primaryColor: Colors.teal),
       title: 'Welcome to Flutter',
       home: RandomWords(),
+    );
+  }
+}
+
+class Contact extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Contact de ouf'),
+      ),
+      body: Center(
+        child: RaisedButton(
+          onPressed: (){},
+          child: Text('Go Back !'),
+        ),
+      ),
     );
   }
 }

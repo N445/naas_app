@@ -8,16 +8,9 @@ import 'package:english_words/english_words.dart';
 void main() => runApp(MyApp());
 
 class RandomWordsState extends State<RandomWords> {
-  int _selectedIndex = 0;
   final List<WordPair> _suggestions = <WordPair>[];
   final Set<WordPair> _saved = Set<WordPair>();
   final TextStyle _biggerFont = const TextStyle(fontSize: 18.0);
-
-  void _onTapItem(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +20,8 @@ class RandomWordsState extends State<RandomWords> {
             return IconButton(
               icon: const Icon(Icons.apps),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => Contact()
-                ));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Contact()));
               },
             );
           }),
@@ -80,28 +72,6 @@ class RandomWordsState extends State<RandomWords> {
         });
   }
 
-  Widget _buildBottomNav() {
-    return BottomNavigationBar(
-      items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          title: Text('Home'),
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.business),
-          title: Text('Business'),
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.school),
-          title: Text('School'),
-        ),
-      ],
-      currentIndex: _selectedIndex,
-      selectedItemColor: Colors.teal,
-      onTap: _onTapItem,
-    );
-  }
-
   void _pushSaved() {
     Navigator.of(context)
         .push(MaterialPageRoute<void>(builder: (BuildContext context) {
@@ -116,12 +86,11 @@ class RandomWordsState extends State<RandomWords> {
       ListTile.divideTiles(context: context, tiles: tiles).toList();
 
       return Scaffold(
-        // Add 6 lines from here...
         appBar: AppBar(
           title: Text('Saved Suggestions'),
         ),
         body: ListView(children: divided),
-      ); // ... to here.
+      );
     }));
   }
 }
@@ -143,19 +112,71 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class Contact extends StatelessWidget {
+class ContactBuildState extends State<ContactBuild> {
   @override
+  int _selectedIndex = 0;
+  static const List<Widget> _widgetOptions = <Widget>[
+    Text('Text 1'),
+    Text('Text 2'),
+    Text('Text 3'),
+  ];
+
+  void _onTapItem(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: Builder(builder: (BuildContext context) {
+          return IconButton(
+            icon: Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => MyApp()));
+            },
+          );
+        },),
         title: Text('Contact de ouf'),
       ),
       body: Center(
-        child: RaisedButton(
-          onPressed: (){},
-          child: Text('Go Back !'),
-        ),
+          child: _widgetOptions.elementAt(_selectedIndex)
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            title: Text('Home'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.business),
+            title: Text('Business'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.school),
+            title: Text('School'),
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.teal,
+        onTap: _onTapItem,
+      ),
+    );
+  }
+}
+
+class ContactBuild extends StatefulWidget {
+  @override
+  ContactBuildState createState() => ContactBuildState();
+}
+
+class Contact extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: ContactBuild(),
     );
   }
 }

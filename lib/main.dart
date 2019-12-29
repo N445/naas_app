@@ -113,7 +113,6 @@ class MyApp extends StatelessWidget {
 }
 
 class ContactBuildState extends State<ContactBuild> {
-  @override
   int _selectedIndex = 0;
   static const List<Widget> _widgetOptions = <Widget>[
     Text('Text 1'),
@@ -127,6 +126,7 @@ class ContactBuildState extends State<ContactBuild> {
     });
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
